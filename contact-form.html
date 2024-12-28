@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Contact Us</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Contact Us</h1>
+        <form id="contact-form">
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+              <input class="input" type="text" name="Name" required />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Mobile Number</label>
+            <div class="control">
+              <input class="input" type="text" name="Mobile Number" required />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Age</label>
+            <div class="control">
+              <input class="input" type="number" name="Age" required />
+            </div>
+          </div>
+          <div class="control">
+            <button class="button is-primary" type="submit">Submit</button>
+          </div>
+        </form>
+        <div id="message" style="margin-top: 20px; display: none;"></div>
+      </div>
+    </section>
+
+    <script>
+      document.getElementById('contact-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const form = new FormData(this);
+        const formDataString = new URLSearchParams([...form]).toString();
+
+        fetch('https://script.google.com/macros/s/AKfycbymwyvgt7ck_4rEnysX-IfEj6XFvYJCzbXE767Q_Gz7yq22GEs520lI1CZpIWivj8kk/exec', {
+          method: 'POST',
+          body: formDataString,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.result === 'success') {
+              document.getElementById('message').textContent = 'Form submitted successfully!';
+              document.getElementById('message').style.color = 'green';
+              document.getElementById('message').style.display = 'block';
+              document.getElementById('contact-form').reset();
+            } else {
+              throw new Error('Submission failed.');
+            }
+          })
+          .catch(error => {
+            document.getElementById('message').textContent = 'Error submitting the form.';
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').style.display = 'block';
+          });
+      });
+    </script>
+  </body>
+</html>
